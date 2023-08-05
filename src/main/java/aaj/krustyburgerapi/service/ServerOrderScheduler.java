@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
@@ -43,13 +44,13 @@ public class ServerOrderScheduler implements OrderScheduler {
 
     @Scheduled(fixedDelay = 15000L)
     private void switchToInQueue() {
-        orderEntityService.findAll().stream().filter(order -> order.getStatus().equals(OrderStatus.READY_TO_SERVE.getName()))
+        orderEntityService.findAll().stream().filter(Objects::nonNull).filter(order -> order.getStatus().equals(OrderStatus.READY_TO_SERVE.getName()))
                 .forEach(order -> orderEntityService.save(order.setStatus(OrderStatus.IN_QUEUE_TO_SERVE.getName())));
     }
 
     @Scheduled(fixedDelay = 15000L)
     private void switchToNext() {
-        orderEntityService.findAll().stream().filter(order -> order.getStatus().equals(OrderStatus.IN_QUEUE_TO_SERVE.getName()))
+        orderEntityService.findAll().stream().filter(Objects::nonNull).filter(order -> order.getStatus().equals(OrderStatus.IN_QUEUE_TO_SERVE.getName()))
                 .forEach(order -> orderEntityService.save(next(order)));
     }
 }

@@ -1,20 +1,27 @@
 # Server Config
+
+
 spring:
   mvc:
     converters:
       preferred-json-mapper: jackson
   datasource:
-    url: jdbc:h2:file:./data/krusty_db
+    url: jdbc:h2:file:./data/krusty_db;NON_KEYWORDS=type,name,user,status,order
     username: sa
     password: password
     driverClassName: org.h2.Driver
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
+
       ddl-auto: update
+
     defer-datasource-initialization: true
   application:
     name: AAJ-KRUSTY-BURGER-API
+  h2:
+    console:
+      enabled: true
 server:
   http2:
     enabled: true
